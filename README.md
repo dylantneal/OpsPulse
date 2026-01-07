@@ -4,15 +4,6 @@
 
 A multithreaded client-server system for real-time incident management and operational event broadcasting. Built with modern C++20, this project demonstrates production-grade systems engineering patterns commonly used in trading and financial infrastructure environments.
 
-```
-   ____            ____        __          
-  / __ \____  ____/ __ \__  __/ /___ ___  
- / / / / __ \/ __/ /_/ / / / / / __ `__ \ 
-/ /_/ / /_/ (__  ) ____/ /_/ / / / / / / / 
-\____/ .___/____/_/    \__,_/_/_/ /_/ /_/  
-    /_/           
-```
-
 ## Features
 
 ### Server
