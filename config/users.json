@@ -1,0 +1,30 @@
+{
+    "users": [
+        {
+            "username": "admin",
+            "token": "admin-secret",
+            "role": "admin"
+        },
+        {
+            "username": "operator",
+            "token": "operator-secret",
+            "role": "operator"
+        },
+        {
+            "username": "viewer",
+            "token": "viewer-secret",
+            "role": "viewer"
+        },
+        {
+            "username": "trading-ops",
+            "token": "trading-ops-key",
+            "role": "operator"
+        },
+        {
+            "username": "infra-bot",
+            "token": "infra-bot-key",
+            "role": "operator"
+        }
+    ]
+}
+
