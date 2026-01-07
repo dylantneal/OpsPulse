@@ -6,7 +6,8 @@
 void printUsage(const char* program) {
     std::cout << "Usage: " << program << " [options]\n"
               << "Options:\n"
-              << "  -p, --port PORT        Server port (default: 9090)\n"
+              << "  -p, --port PORT        TCP server port (default: 9090)\n"
+              << "  --ws-port PORT         WebSocket server port (default: 8080)\n"
               << "  -w, --workers N        Worker thread count (default: 4)\n"
               << "  -l, --log PATH         Event log file path (default: data/events.log)\n"
               << "  -u, --users PATH       Users config file (default: config/users.json)\n"
@@ -28,6 +29,9 @@ int main(int argc, char* argv[]) {
         }
         else if ((arg == "-p" || arg == "--port") && i + 1 < argc) {
             config.port = std::atoi(argv[++i]);
+        }
+        else if (arg == "--ws-port" && i + 1 < argc) {
+            config.wsPort = std::atoi(argv[++i]);
         }
         else if ((arg == "-w" || arg == "--workers") && i + 1 < argc) {
             config.workerThreads = std::atoi(argv[++i]);
@@ -59,7 +63,8 @@ int main(int argc, char* argv[]) {
 )" << std::endl;
 
     std::cout << "Configuration:" << std::endl;
-    std::cout << "  Port:         " << config.port << std::endl;
+    std::cout << "  TCP Port:     " << config.port << std::endl;
+    std::cout << "  WS Port:      " << config.wsPort << " (WebSocket for browsers)" << std::endl;
     std::cout << "  Workers:      " << config.workerThreads << std::endl;
     std::cout << "  Event Log:    " << config.eventLogPath << std::endl;
     std::cout << "  Users File:   " << config.usersFilePath << std::endl;

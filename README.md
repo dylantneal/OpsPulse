@@ -17,6 +17,7 @@ A multithreaded client-server system for real-time incident management and opera
 
 ### Server
 - **TCP Socket Server** with concurrent connection handling
+- **WebSocket Server** for browser-based real-time connections
 - **Thread Pool** for CPU-bound request processing
 - **Length-Prefixed Message Framing** (4-byte big-endian) for reliable message parsing
 - **Central Request Queue** decoupling I/O from processing
@@ -25,10 +26,18 @@ A multithreaded client-server system for real-time incident management and opera
 - **Append-Only Event Log** for persistence and crash recovery
 - **Role-Based Authentication** (admin, operator, viewer)
 
-### Client
+### CLI Client
 - Interactive CLI with colored output
 - Real-time push notifications for events and incidents
 - Subscription-based channel filtering
+
+### Web Dashboard
+- **React + TypeScript** modern single-page application
+- **Real-time WebSocket** connection with auto-reconnect
+- **Dark fintech theme** with responsive design
+- **Live event stream** with color-coded severity levels
+- **Incident management** with status workflow actions
+- **Dashboard view** with key metrics and quick actions
 
 ### Data Model
 - **Events**: Timestamped log entries with channels, severity levels, and tags
@@ -125,12 +134,25 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 ./opspulse_server [options]
 
 Options:
-  -p, --port PORT        Server port (default: 9090)
+  -p, --port PORT        TCP server port (default: 9090)
+  --ws-port PORT         WebSocket server port (default: 8080)
   -w, --workers N        Worker thread count (default: 4)
   -l, --log PATH         Event log file path (default: data/events.log)
   -u, --users PATH       Users config file (default: config/users.json)
   --no-auth              Disable authentication
   -h, --help             Show help
+```
+
+### Starting the Web Dashboard
+
+```bash
+# Install dependencies (first time only)
+cd web && npm install
+
+# Start development server
+npm run dev
+
+# Open http://localhost:5173 in your browser
 ```
 
 ### Using the CLI Client
@@ -235,6 +257,21 @@ Messages use a length-prefixed framing protocol:
 
 // Push incident update
 {"type": "push_incident_update", "payload": {"id": "INC-1001", "field": "status", "new_value": "ACKED"}}
+```
+
+### WebSocket API (Port 8080)
+
+The WebSocket API uses standard WebSocket protocol with JSON messages. No length-prefix framing needed.
+
+**Additional message types for WebSocket:**
+```json
+// List events
+{"type": "list_events", "payload": {"channel": "", "limit": 50}}
+{"type": "events", "payload": {"events": [...], "count": 50}}
+
+// List incidents
+{"type": "list_incidents", "payload": {"channel": "", "status": ""}}
+{"type": "incidents", "payload": {"incidents": [...], "count": 10}}
 ```
 
 ## Configuration

@@ -1,5 +1,6 @@
 #include "server/Server.hpp"
 #include "server/RequestHandler.hpp"
+#include "server/WebSocketServer.hpp"
 #include <iostream>
 #include <cstring>
 #include <csignal>
@@ -73,6 +74,10 @@ bool Server::initialize() {
 
     // Setup state change callbacks
     setupCallbacks();
+
+    // Create WebSocket server for browser connections
+    wsServer_ = std::make_unique<WebSocketServer>(config_.wsPort, *stateStore_, 
+                                                   *authManager_, config_.enableAuth);
 
     return true;
 }
@@ -169,6 +174,11 @@ void Server::run() {
     // Start broadcaster
     broadcaster_->start();
 
+    // Start WebSocket server
+    if (wsServer_ && !wsServer_->start()) {
+        std::cerr << "[Server] Warning: WebSocket server failed to start" << std::endl;
+    }
+
     // Start I/O threads
     running_.store(true);
     for (int i = 0; i < config::IO_THREADS; ++i) {
@@ -176,6 +186,7 @@ void Server::run() {
     }
 
     std::cout << "[Server] Ready to accept connections" << std::endl;
+    std::cout << "[Server] WebSocket API available on port " << config_.wsPort << std::endl;
     std::cout << "[Server] Stats: " << stateStore_->eventCount() << " events, "
               << stateStore_->incidentCount() << " incidents loaded" << std::endl;
 
@@ -368,6 +379,11 @@ void Server::shutdown() {
     // Stop broadcaster
     if (broadcaster_) {
         broadcaster_->stop();
+    }
+
+    // Stop WebSocket server
+    if (wsServer_) {
+        wsServer_->stop();
     }
 
     // Shutdown worker pool

@@ -16,8 +16,12 @@
 
 namespace opspulse {
 
+// Forward declaration
+class WebSocketServer;
+
 struct ServerConfig {
     int port = config::DEFAULT_PORT;
+    int wsPort = 8080;  // WebSocket port for browser connections
     int workerThreads = config::WORKER_THREADS;
     std::string eventLogPath = "data/events.log";
     std::string usersFilePath = "config/users.json";
@@ -61,6 +65,7 @@ private:
     std::unique_ptr<Broadcaster> broadcaster_;
     std::unique_ptr<EventLog> eventLog_;
     std::unique_ptr<AuthManager> authManager_;
+    std::unique_ptr<WebSocketServer> wsServer_;  // WebSocket server for browsers
 
     // Networking
     SocketType listenSocket_ = INVALID_SOCK;

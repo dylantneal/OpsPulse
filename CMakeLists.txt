@@ -59,6 +59,7 @@ add_executable(opspulse_server
     src/server/EventLog.cpp
     src/server/Auth.cpp
     src/server/RequestHandler.cpp
+    src/server/WebSocketServer.cpp
 )
 target_link_libraries(opspulse_server PRIVATE opspulse_common ${PLATFORM_LIBS})
 
